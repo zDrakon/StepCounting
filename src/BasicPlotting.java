@@ -11,20 +11,29 @@ public class BasicPlotting {
 		double[] sample2 = new double[size];
 		
 		for (int i = 0; i < size; i++) {
-			sample1[i] = Math.random()*20 + 10;
-			sample2[i] = i + -5 + Math.random()*5;
+			sample2[i] = i;
+			sample1[i] = 10;
 		}
+		
+		addNoise(sample1, 5);
+		addNoise(sample2, 50);
 		
 		Plot2DPanel plot = new Plot2DPanel();
 		
 		// add a line plot to the PlotPanel
 		plot.addLinePlot("Random signal", sample1);
 		plot.addLinePlot("y = x + noise", sample2);
-
+		
 		// put the PlotPanel in a JFrame, as a JPanel
 		JFrame frame = new JFrame("Results");
 		frame.setSize(800, 600);
 		frame.setContentPane(plot);
 		frame.setVisible(true);
+	}
+
+	private static void addNoise(double[] sample, int max) {
+		for (int i = 0; i < sample.length; i++) {
+			sample[i] += (-max + Math.random()*2*max);
+		}
 	}
 }
