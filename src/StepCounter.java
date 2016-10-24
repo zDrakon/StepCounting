@@ -1,5 +1,5 @@
 
-public class Analyze {
+public class StepCounter {
 
 	/***
 	 * 
@@ -43,7 +43,9 @@ public class Analyze {
 		double[] magnitudesOfAccelerations = calculateMagnitudesFor(sensorData);
 		int count = 0;
 		for (int i = 1; i < magnitudesOfAccelerations.length - 1; i++) {
-			if (isPeak(magnitudesOfAccelerations, i)) {
+			if (isPeak(magnitudesOfAccelerations, i)
+					&& magnitudesOfAccelerations[i] < calculateStandardDeviation(magnitudesOfAccelerations,
+							calculateMean(magnitudesOfAccelerations))) {
 				count++;
 			}
 		}
@@ -65,10 +67,28 @@ public class Analyze {
 	 * @return
 	 */
 	public static double calculateMean(double[] arr) {
+		double sum = 0;
+		for (int i = 0; i < arr.length; i++) {
+			sum += arr[i];
+		}
+		return sum / (double) arr.length;
 
 	}
 
-	public static calculateStandardDeviation(double[] arr, double mean) {
-		
+	/***
+	 * 
+	 * @param arr
+	 * @param mean
+	 */
+	public static double calculateStandardDeviation(double[] arr, double mean) {
+		double sum = 0;
+		double stddev = 0;
+		for (int i = 0; i < arr.length; i++) {
+			stddev = (mean - arr[i]) * (mean - arr[i]);
+			sum += stddev;
+		}
+		stddev = sum / (double) ((arr.length - 1) - 1);
+		return Math.sqrt(stddev);
+
 	}
 }
