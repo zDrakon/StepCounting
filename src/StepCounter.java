@@ -34,6 +34,8 @@ public class StepCounter {
 	}
 
 	/***
+	 * returns number of steps by finding peaks greater than the standard
+	 * deviation
 	 * 
 	 * @param times
 	 * @param sensorData
@@ -55,6 +57,28 @@ public class StepCounter {
 		return count;
 	}
 
+	/***
+	 * turns the times in the first column of the array into elapsed time
+	 * 
+	 * @param sensorData
+	 */
+	public static void replaceAbswithElapsed(double[][] sensorData) {
+
+		for (int row = 1; row < sensorData.length; row++) {
+			sensorData[row][0] -= sensorData[1][0];
+		}
+		sensorData[1][0] = 0;
+
+	}
+
+	/***
+	 * Returns true or false comparing a index to 2 other indexes (one before
+	 * and after) to determine if it is a peak
+	 * 
+	 * @param magnitudesOfAccelerations
+	 * @param i
+	 * @return true or false, indicate peak.
+	 */
 	private static boolean isPeak(double[] magnitudesOfAccelerations, int i) {
 		if (magnitudesOfAccelerations[i - 1] < magnitudesOfAccelerations[i]
 				&& magnitudesOfAccelerations[i + 1] < magnitudesOfAccelerations[i]) {
@@ -64,9 +88,10 @@ public class StepCounter {
 	}
 
 	/***
+	 * Returns the mean of an array
 	 * 
 	 * @param arr
-	 * @return
+	 * @return mean of an array
 	 */
 	public static double calculateMean(double[] arr) {
 		double sum = 0;
@@ -78,9 +103,11 @@ public class StepCounter {
 	}
 
 	/***
+	 * Returns STDEV of an array with a given mean
 	 * 
 	 * @param arr
 	 * @param mean
+	 * @return Standard deviation of an array given the mean
 	 */
 	public static double calculateStandardDeviation(double[] arr, double mean) {
 		double sum = 0;
@@ -92,5 +119,15 @@ public class StepCounter {
 		stddev = sum / (double) ((arr.length - 1) - 1);
 		return Math.sqrt(stddev);
 
+	}
+
+	/***
+	 * Cleaner method for calculating STDEV
+	 * 
+	 * @param arr
+	 * @return
+	 */
+	public static double calculateStandardDeviation(double[] arr) {
+		return calculateStandardDeviation(arr, calculateMean(arr));
 	}
 }
