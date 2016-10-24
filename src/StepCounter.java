@@ -42,10 +42,12 @@ public class StepCounter {
 	public static int countSteps(double[] times, double[][] sensorData) {
 		double[] magnitudesOfAccelerations = calculateMagnitudesFor(sensorData);
 		int count = 0;
+
+		double threshold = calculateStandardDeviation(magnitudesOfAccelerations,
+				calculateMean(magnitudesOfAccelerations));
+
 		for (int i = 1; i < magnitudesOfAccelerations.length - 1; i++) {
-			if (isPeak(magnitudesOfAccelerations, i)
-					&& magnitudesOfAccelerations[i] < calculateStandardDeviation(magnitudesOfAccelerations,
-							calculateMean(magnitudesOfAccelerations))) {
+			if (isPeak(magnitudesOfAccelerations, i) && magnitudesOfAccelerations[i] < threshold) {
 				count++;
 			}
 		}
