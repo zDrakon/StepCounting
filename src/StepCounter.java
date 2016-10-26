@@ -45,11 +45,14 @@ public class StepCounter {
 		double[] magnitudesOfAccelerations = calculateMagnitudesFor(sensorData);
 		double[] count = new double[times.length];
 
-		double threshold = calculateStandardDeviation(magnitudesOfAccelerations,
-				calculateMean(magnitudesOfAccelerations));
+		double threshold = calculateStandardDeviation(magnitudesOfAccelerations)
+				+ calculateMean(magnitudesOfAccelerations);
 		for (int i = 1; i < magnitudesOfAccelerations.length - 1; i++) {
-			if (isPeak(magnitudesOfAccelerations, i) && magnitudesOfAccelerations[i] < threshold) {
-				count[i]++;
+
+			if (isPeak(magnitudesOfAccelerations, i)) {
+				if (magnitudesOfAccelerations[i] > threshold) {
+					count[i]++;
+				}
 			}
 		}
 
@@ -77,8 +80,8 @@ public class StepCounter {
 	 * @return true or false, indicate peak.
 	 */
 	private static boolean isPeak(double[] magnitudesOfAccelerations, int i) {
-		if (magnitudesOfAccelerations[i - 1] < magnitudesOfAccelerations[i]
-				&& magnitudesOfAccelerations[i + 1] < magnitudesOfAccelerations[i]) {
+		if (magnitudesOfAccelerations[i] > magnitudesOfAccelerations[i - 1]
+				&& magnitudesOfAccelerations[i] > magnitudesOfAccelerations[i + 1]) {
 			return true;
 		}
 		return false;
@@ -126,6 +129,17 @@ public class StepCounter {
 	 */
 	public static double calculateStandardDeviation(double[] arr) {
 		return calculateStandardDeviation(arr, calculateMean(arr));
+	}
+
+	public static int numSteps(double[] counts) {
+		int count = 0;
+		for (int i = 0; i < counts.length; i++) {
+			if (counts[i] == 1) {
+				count++;
+			}
+		}
+
+		return count;
 	}
 
 }
