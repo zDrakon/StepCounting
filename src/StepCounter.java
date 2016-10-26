@@ -41,16 +41,15 @@ public class StepCounter {
 	 * @param sensorData
 	 * @return
 	 */
-	public static int countSteps(double[] times, double[][] sensorData) {
+	public static double[] countSteps(double[] times, double[][] sensorData) {
 		double[] magnitudesOfAccelerations = calculateMagnitudesFor(sensorData);
-		int count = 0;
+		double[] count = new double[times.length];
 
 		double threshold = calculateStandardDeviation(magnitudesOfAccelerations,
 				calculateMean(magnitudesOfAccelerations));
-
 		for (int i = 1; i < magnitudesOfAccelerations.length - 1; i++) {
 			if (isPeak(magnitudesOfAccelerations, i) && magnitudesOfAccelerations[i] < threshold) {
-				count++;
+				count[i]++;
 			}
 		}
 
@@ -63,12 +62,10 @@ public class StepCounter {
 	 * @param sensorData
 	 */
 	public static void replaceAbswithElapsed(double[][] sensorData) {
-
 		for (int row = 1; row < sensorData.length; row++) {
 			sensorData[row][0] -= sensorData[1][0];
 		}
 		sensorData[1][0] = 0;
-
 	}
 
 	/***
@@ -130,4 +127,5 @@ public class StepCounter {
 	public static double calculateStandardDeviation(double[] arr) {
 		return calculateStandardDeviation(arr, calculateMean(arr));
 	}
+
 }
